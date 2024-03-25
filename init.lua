@@ -37,54 +37,55 @@ local wk = require('which-key')
 wk.setup()
 wk.register({
     ['<leader>'] = {
-        ['<space>'] = {'<cmd>nohlsearch<cr>' ,'Clear search highlighting'},
-        p = { name = 'Pick (fzf)',
-            d = {'<cmd>FzfLua grep_cword<cr>','Word under cursor'},
-            s = {'<cmd>FzfLua live_grep<cr>','String you type'},
-            f = {'<cmd>FzfLua files<cr>','Filename'},
-        },
-        w = {'<cmd>w<cr>','Write file'},
-        q = {'<cmd>bd<cr>','Kill buffer'},
-        g = { name = 'Git',
-            d = {'<cmd>Gvdiffsplit<cr>', 'Git diff split'},
-            --g = {'<cmd>LazyGit<cr>', 'LazyGit', mode = {'n','v','t'}},
-        },
-        r = {':%s///g<Left><Left><Left>', 'Replace', mode = {'n'}, silent=false },
-    },
-    r = {':s///g<Left><Left><Left>', 'Replace', mode = {'v'}, silent=false },
-    s = {':VMSearch<space>', 'Multicursor search', mode = {'v'}, silent=false},
-    ['<tab>'] = {'<cmd>bnext<cr>','Switch to next buffer'},
-    U = {'<C-r>', 'Redo with U', mode = {'n','v'}},
-    ö = {':', 'Run command (:)', mode = {'n','v'}, silent = false},
-    ä = {'/', 'Search', mode = {'n','v'}, silent = false},
-    v = { 
-        v = {'V', 'Visual Line'},
-        c = {'<C-v>', 'Visual column'},
+        f = { name = 'Fold search'},
+        p = { name = 'Pick (fzf)'},
+        v = { name = 'Vim Visual Multi'},
     },
 })
-vim.keymap.set({'n','v'}, 'gl', '$',  { desc = 'Move to the end of the line'    ,noremap=false})
-vim.keymap.set({'n','v'}, 'gj', 'G',  { desc = 'Move to the end of the file'    ,noremap=false})
-vim.keymap.set({'n','v'}, 'gk', 'gg', { desc = 'Move to the start of the file'  ,noremap=false})
-vim.keymap.set({'n','v'}, 'gh', '0',  { desc = 'Move to the start of the line'  ,noremap=false})
+vim.keymap.set({'n','v'}, 'gl',               '$',                          {desc = 'Move to the end of the line' ,noremap=false})
+vim.keymap.set({'n','v'}, 'gj',               'G',                          {desc = 'Move to the end of the file' ,noremap=false})
+vim.keymap.set({'n','v'}, 'gk',               'gg',                         {desc = 'Move to the start of the file' ,noremap=false})
+vim.keymap.set({'n','v'}, 'gh',               '0',                          {desc = 'Move to the start of the line' ,noremap=false})
+vim.keymap.set({'n','v'}, 'U',                '<C-r>',                      {desc= 'Redo with U' })
+vim.keymap.set({'n','v'}, 'ö',                ':',                          {desc= 'Run command (:)', silent = false})
+vim.keymap.set({'n','v'}, 'ä',                '/',                          {desc= 'Search', silent = false})
+vim.keymap.set({'n','v'}, '<tab>',            '<cmd>bnext<cr>',             {desc= 'Switch to next buffer', silent = false})
+vim.keymap.set({'n','v'}, '<leader>pd',       '<cmd>FzfLua grep_cword<cr>', {desc = 'Word under cursor'  ,noremap=false})
+vim.keymap.set({'n','v'}, '<leader>ps',       '<cmd>FzfLua live_grep<cr>',  {desc = 'String you type'  ,noremap=false})
+vim.keymap.set({'n','v'}, '<leader>pf',       '<cmd>FzfLua files<cr>',      {desc = 'Filename'  ,noremap=false})
+vim.keymap.set({'n','v'}, '<leader>w',        '<cmd>w<cr>',                 {desc = 'Write file'  ,noremap=false})
+vim.keymap.set({'n','v'}, '<leader>q',        '<cmd>bd!<cr>',               {desc = 'Buffer Delete'  ,noremap=false})
+vim.keymap.set({'n','v'}, '<leader>g',        '<cmd>Gvdiffsplit<cr>',       {desc = 'Git diff split'  ,noremap=false})
+vim.keymap.set({'n','v'}, '<leader><leader>', '<cmd>nohlsearch<cr>',        {desc = 'Clear search highlight'  ,noremap=false})
+vim.keymap.set('n',       '<leader>r',        ':%s///g<Left><Left>',        {desc = 'Replace'  ,noremap=false, silent=false})
+vim.keymap.set('v',       '<leader>r',        ':s///g<Left><Left>',         {desc = 'Replace'  ,noremap=false, silent=false})
 
-vim.keymap.set('v', 'sa', '<Nop>', {noremap=false})
-vim.keymap.set('c', 'qq', 'q!', {noremap=false})
-vim.keymap.set('c', '<leader>', [[getcmdtype() == "/" || getcmdtype() == "?" ? ".\\{-}" : "<space>"]], {expr=true})
-vim.keymap.set('c', '<cr>', [[getcmdtype() == "/" || getcmdtype() == "?" ? "<cr>:Fs<cr>" : "<cr>"]], {expr=true})
+vim.keymap.set('n', '<leader>s', [[':<C-u>/\<' . expand('<cword>') . '\><cr>:Fs<cr>']], { desc = 'Search highlight', noremap = true, silent = false, expr = true })
 
-vim.cmd([[function ToggleFold()
-let view = winsaveview()
-exec 'keepjumps normal! zj'
-if foldclosed('.') > -1 
-    exec 'normal! zR' 
-else
-    exec 'keepjumps normal! zk'
-    if foldclosed('.') > -1 
-        exec 'normal! zR' 
-    else 
-        exec 'normal! zM' 
-    endif
-endif
-call winrestview(view)
+vim.keymap.set('n', 'vv',       'V',                        {desc = 'Visual line'})
+vim.keymap.set('n', 'vc',       '<C-v>',                    {desc = 'Visual column'})
+vim.keymap.set('n', '<cr>',     ':call ToggleFold()<cr>zz', {noremap=true})
+vim.keymap.set('v', 'sa',       '<Nop>',                    {noremap=false})
+vim.keymap.set('v', 's',        ':VMSearch ',               {desc='Multicursor search', noremap=false,silent=false})
+
+vim.keymap.set('c', 'qq',       'q!',                                                                    {noremap=false})
+vim.keymap.set('c', '<leader>', [[getcmdtype() == "/" || getcmdtype() == "?" ? ".\\{-}" : "<space>"]],   {expr=true})
+vim.keymap.set('c', '<cr>',     [[getcmdtype() == "/" || getcmdtype() == "?" ? "<cr>:Fs<cr>" : "<cr>"]], {expr=true})
+
+vim.cmd([[
+function! ToggleFold()
+  let view = winsaveview()
+  exec 'keepjumps normal! zj'
+  if foldclosed('.') > -1 
+      exec 'normal! zR' 
+  else
+      exec 'keepjumps normal! zk'
+      if foldclosed('.') > -1 
+          exec 'normal! zR' 
+      else 
+          exec 'normal! zM' 
+      endif
+  endif
+  call winrestview(view)
 endfunction
 ]])
