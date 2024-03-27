@@ -1,3 +1,4 @@
+-- download plugins with plugins.sh
 vim.cmd.colorscheme('gruvbox')
 vim.opt.ignorecase         = true
 vim.opt.number             = true
@@ -5,37 +6,22 @@ vim.opt.cursorline         = true
 vim.opt.expandtab          = true
 vim.opt.clipboard          = 'unnamedplus'
 vim.opt.termguicolors      = true
-vim.opt.wildmode           = 'longest,list'
+vim.opt.wildmode           = 'longest:full,full'
 vim.opt.tabstop            = 4
 vim.opt.softtabstop        = 4
 vim.opt.shiftwidth         = 4
-vim.opt.termguicolors      = true
-vim.opt.number             = true
 vim.g.mapleader            = ' '
 vim.g.VM_leader            = '<space>v'
 vim.g.foldsearch_highlight = 1
-vim.o.timeout              = true
-vim.o.timeoutlen           = 200
+vim.opt.timeoutlen         = 200
 vim.opt.whichwrap          = vim.opt.whichwrap+'<,>,h,l,[,]'
 -- Open buffer at cursor location when last closed.
-vim.cmd([[ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif ]])
+vim.cmd([[ au BufWinEnter * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"zz" | endif ]])
+
 require('mini.surround').setup()
 require('fzf-lua').setup()
-require('nvim-treesitter').setup()
-require('nvim-treesitter.configs').setup({
-    incremental_selection = {
-        enable = true,
-        keymaps = {
-            init_selection = 'vm',
-            scope_incremental = false,
-            node_incremental = 'm',
-            node_decremental = 'n',
-        },
-    },
-    highlight  = { enable = true },
-})
+require('nvim-treesitter.configs').setup({ incremental_selection = { enable = true, keymaps = { init_selection = 'vm', scope_incremental = false, node_incremental = 'm', node_decremental = 'n', }, }, highlight  = { enable = true }, })
 local wk = require('which-key')
-
 wk.setup()
 wk.register({
     ['<leader>'] = {
@@ -63,12 +49,14 @@ vim.keymap.set({'n','v'}, '<leader><leader>', '<cmd>nohlsearch<cr>',        {des
 vim.keymap.set('v',       'sa',               '<Nop>',                      {desc = 'No visual surround add: s is used for multicursors.'})
 vim.keymap.set('v',       's',                ':VMSearch ',                 {desc = 'Multicursor search', silent=false})
 vim.keymap.set('c',       'qq',               'q!',                         {desc = 'Rage quit'})
+vim.keymap.set('c',       'ww',               ':SudaWrite<cr>',             {desc = 'Write as Sudo'})
 vim.keymap.set('n',       '<cr>',             ':call ToggleFold()<cr>zz',   {desc = 'Toggle folds'})
 vim.keymap.set('n',       '<leader>ff',       ':call ToggleFold()<cr>zz',   {desc = 'Toggle folds'})
 -- Always fold seaches using Fold search.
 -- Space adds .\\{-} instead of space for fuzzy search.
-vim.keymap.set('c', '<cr>',     [[getcmdtype() == "/" || getcmdtype() == "?" ? "<cr>:Fs<cr>" : "<cr>"]], {expr=true})
-vim.keymap.set('c', '<space>', [[getcmdtype() == "/" || getcmdtype() == "?" ? ".\\{-}" : "<space>"]],   {expr=true})
+vim.keymap.set('c', '<cr>',     [[getcmdtype() == '/' || getcmdtype() == '?' ? '<cr>:Fs<cr>' : '<cr>']], {expr=true})
+vim.keymap.set('c', '<space>', [[getcmdtype() == '/' || getcmdtype() == '?' ? '.\{-}' : '<space>']],   {expr=true})
+
 vim.cmd([[
 function! ToggleFold()
   let view = winsaveview()
