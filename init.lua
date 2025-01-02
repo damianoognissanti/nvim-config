@@ -23,12 +23,10 @@ require('fzf-lua').setup()
 require('nvim-treesitter.configs').setup({ incremental_selection = { enable = true, keymaps = { init_selection = 'vm', scope_incremental = false, node_incremental = 'm', node_decremental = 'n', }, }, highlight  = { enable = true }, })
 local wk = require('which-key')
 wk.setup()
-wk.register({
-    ['<leader>'] = {
-        f = { name = 'Fold search'},
-        p = { name = 'Pick (fzf)'},
-        v = { name = 'Vim Visual Multi'},
-    },
+wk.add({
+        {"<leader>f", name = 'Fold search'},
+        {"<leader>p", name = 'Pick (fzf)'},
+        {"<leader>v", name = 'Vim Visual Multi'},
 })
 vim.keymap.set({'n','v'}, 'gl',               '$',                          {desc = 'Move to the end of the line', noremap=false})
 vim.keymap.set({'n','v'}, 'gj',               'G',                          {desc = 'Move to the end of the file', noremap=false})
