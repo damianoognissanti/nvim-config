@@ -50,6 +50,8 @@ vim.keymap.set('c',       'qq',               'q!',                         {des
 vim.keymap.set('c',       'ww',               ':SudaWrite<cr>',             {desc = 'Write as Sudo'})
 vim.keymap.set('n',       '<cr>',             ':call ToggleFold()<cr>zz',   {desc = 'Toggle folds'})
 vim.keymap.set('n',       '<leader>ff',       ':call ToggleFold()<cr>zz',   {desc = 'Toggle folds'})
+vim.keymap.set('n',       '<leader>o',       '0iOK - <esc>$bbb',    {desc = 'OK Villkor'})
+vim.keymap.set('n',       '<leader>n',       '0iNEJ - <esc>$bbb',    {desc = 'NEJ Villkor'})
 -- Always fold seaches using Fold search.
 -- Space adds .\\{-} instead of space for fuzzy search.
 vim.keymap.set('c', '<cr>',     [[getcmdtype() == '/' || getcmdtype() == '?' ? '<cr>:Fs<cr>' : '<cr>']], {expr=true})
@@ -72,3 +74,19 @@ function! ToggleFold()
   call winrestview(view)
 endfunction
 ]])
+
+vim.cmd([[
+function! YankShift()
+  for i in range(9, 1, -1)
+    call setreg(i, getreg(i - 1))
+  endfor
+endfunction
+function! DeleteShift()
+  call setreg(0, getreg(1))
+endfunction
+
+
+au TextYankPost * if v:event.operator == 'y' | call YankShift() | endif
+au TextYankPost * if v:event.operator == 'd' | call DeleteShift() | endif
+]])
+
