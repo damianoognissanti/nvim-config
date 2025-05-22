@@ -18,6 +18,23 @@ vim.opt.whichwrap          = vim.opt.whichwrap+'<,>,h,l,[,]'
 -- Open buffer at cursor location when last closed.
 vim.cmd([[ au BufWinEnter * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"zz" | endif ]])
 
+if vim.fn.has("wsl") then
+    vim.g.clipboard = {
+        name = "win_clipboard",
+        copy = {
+            ["+"] = "clip.exe",
+            ["*"] = "clip.exe",
+        },
+        paste = {
+            ["+"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+            ["*"] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+        },
+        cache_enabled = 0,
+    }
+    vim.keymap.set({"n", "v"}, "y", '"+y', { noremap = true, silent = true })
+    vim.keymap.set({"n", "v"}, "p", '"+p', { noremap = true, silent = true })
+end
+
 require('mini.surround').setup()
 require('fzf-lua').setup()
 require('nvim-treesitter.configs').setup({ incremental_selection = { enable = true, keymaps = { init_selection = 'vm', scope_incremental = false, node_incremental = 'm', node_decremental = 'n', }, }, highlight  = { enable = true }, })
