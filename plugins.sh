@@ -6,4 +6,5 @@ git clone https://github.com/mg979/vim-visual-multi ~/.config/nvim/pack/plugins/
 git clone https://github.com/lambdalisue/suda.vim ~/.config/nvim/pack/plugins/start/suda.vim
 git clone https://github.com/embear/vim-foldsearch ~/.config/nvim/pack/plugins/start/vim-foldsearch
 git clone https://github.com/tpope/vim-fugitive ~/.config/nvim/pack/plugins/start/vim-fugitive
-git clone https://github.com/ellisonleao/gruvbox.nvim ~/.config/nvim/pack/plugins/start/gruvbox.nvim
+#git clone https://github.com/ellisonleao/gruvbox.nvim ~/.config/nvim/pack/plugins/start/gruvbox.nvim
+git clone https://github.com/dracula/vim ~/.config/nvim/pack/plugins/start/dracula
