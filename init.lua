@@ -21,7 +21,7 @@ vim.cmd([[ au BufWinEnter * if line("'\"") > 1 && line("'\"") <= line("$") | exe
 -- Plugins
 require('mini.surround').setup()
 require('fzf-lua').setup()
-require('nvim-treesitter.configs').setup({ incremental_selection = { enable = true, keymaps = { init_selection = 'vm', scope_incremental = false, node_incremental = 'm', node_decremental = 'n', }, }, highlight = { enable = true }, })
+require('nvim-treesitter.config').setup({ incremental_selection = { enable = true, keymaps = { init_selection = 'vm', scope_incremental = false, node_incremental = 'm', node_decremental = 'n', }, }, highlight = { enable = true }, })
 local wk = require('which-key')
 wk.setup()
 wk.add({
